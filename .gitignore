@@ -50,3 +50,9 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+#DEV-C++
+bin/
+objects/
+logs/
+Makefile.Win
