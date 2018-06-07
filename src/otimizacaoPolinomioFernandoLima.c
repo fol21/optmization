@@ -1,11 +1,8 @@
-#include <stdio.h>
-#include <math.h>
-#include <stdlib.h> 
-
+#include "../include/otimizacaoPolinomioFernandoLima.h"
 
 int lenght(double* array)
 {
-    return sizeof(array)/sizeof(double);
+    return sizeof(array)/sizeof(array[0]);
 }
 
 int compare (const void * a, const void * b)
@@ -16,10 +13,11 @@ int compare (const void * a, const void * b)
 
 double*  optimize(double* coef, int order, int* range)
 {
-    double* buffer;
+    double* buffer = (double*)malloc(100*sizeof(double));
     for(int i =range[0]; i <= range[2] ;i++)
     {
-
+		buffer[i] = 0;
+		int l =NELEMS(coef);
         for(int j= 0; j < lenght(coef);j++)
         {
             buffer[i] += pow(coef[j],(j+1))*i;
@@ -38,16 +36,16 @@ double*  optimize(double* coef, int order, int* range)
 }
 
 
-int main()
-{
-    printf("[Begin Optimization]\n");
+// int main()
+// {
+//     printf("[Begin Optimization]\n");
     
-    double* local;
-    double coef[5] = {1,2,3,4,5};
-    int range[2] = {1,100};
+//     double* local;
+//     double coef[5] = {1,2,3,4,5};
+//     int range[2] = {1,100};
 
-    local = optimize(coef,lenght(coef), range);
+//     local = optimize(coef,lenght(coef), range);
 
-    printf("[min = %f , max = %f]", local[0], local[1]);
-    return 0 ;
-}
+//     printf("[min = %f , max = %f]", local[0], local[1]);
+//     return 0 ;
+// }

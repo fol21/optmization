@@ -55,6 +55,7 @@
                 "UNICODE",
                 "_UNICODE"
             ],
+            "compilerPath": "C:\\Program Files (x86)\\Dev-Cpp\\MinGW64\\bin\\gcc.exe",
             "intelliSenseMode": "msvc-x64",
             "browse": {
                 "path": [
