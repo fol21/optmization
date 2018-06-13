@@ -35,6 +35,30 @@ double*  optimize(double* coef, int order, int* range)
     return local;
 }
 
+/*
+    * Retorna vetor linear com step definido
+    * També retorna o tamanho do vetor por referência
+*/
+double* linSpace(double begin, double end, double step, int* size)
+{
+    double* vector = (double*) malloc(sizeof(double));
+    vector[0] = begin;
+    int count = 2;
+    for(double i = begin+step; i <= end  ;i = i + step)
+    {
+		vector = (double*)realloc(vector, count*sizeof(double));
+		vector[count-1] = i;
+		count++;
+    }
+    *size = count;
+    return vector;
+}
+
+double calculaMaximo(double* coef, int order, double* range, double* xmax)
+{
+    
+}
+
 
 // int main()
 // {
