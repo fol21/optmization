@@ -1,8 +1,22 @@
 #include "../include/otimizacaoPolinomioFernandoLima.h"
 
-int lenght(double* array)
+
+/*
+    * Retorna vetor linear com step definido
+*/
+LinSpaceVector* linSpace_populate(double begin, double end, double step, LinSpaceVector* lsv)
 {
-    return sizeof(array)/sizeof(array[0]);
+    // lsv->vector = (double*) malloc(sizeof(double));
+    // lsv->vector[0] = begin;
+    int count = 1;
+    for(double i = begin; i <= end  ;i = i + step)
+    {
+		lsv->vector = (double*)realloc(lsv->vector, count*sizeof(double));
+		lsv->vector[count-1] = i;
+		count++;
+    }
+    lsv->size = count-1;
+    return lsv;
 }
 
 int compare (const void * a, const void * b)
@@ -11,52 +25,26 @@ int compare (const void * a, const void * b)
 }
 
 
-double*  optimize(double* coef, int order, int* range)
-{
-    double* buffer = (double*)malloc(100*sizeof(double));
-    for(int i =range[0]; i <= range[2] ;i++)
-    {
-		buffer[i] = 0;
-		int l =NELEMS(coef);
-        for(int j= 0; j < lenght(coef);j++)
-        {
-            buffer[i] += pow(coef[j],(j+1))*i;
-        }
-
-    }
-
-    //sort buffer
-    qsort (buffer, lenght(buffer), sizeof(double), compare);
-    double min = buffer[0];
-    double max = buffer[lenght(buffer)];
-
-
-    double local[2] = {min,max};
-    return local;
-}
-
-/*
-    * Retorna vetor linear com step definido
-    * També retorna o tamanho do vetor por referência
-*/
-double* linSpace(double begin, double end, double step, int* size)
-{
-    double* vector = (double*) malloc(sizeof(double));
-    vector[0] = begin;
-    int count = 2;
-    for(double i = begin+step; i <= end  ;i = i + step)
-    {
-		vector = (double*)realloc(vector, count*sizeof(double));
-		vector[count-1] = i;
-		count++;
-    }
-    *size = count;
-    return vector;
-}
-
 double calculaMaximo(double* coef, int order, double* range, double* xmax)
 {
-    
+    LinSpaceVector  v = {NULL, 0}; 
+    linSpace_populate(range[0], range[1], 0.0001, &v);
+    double* buffer = (double*)malloc(v.size*sizeof(double));
+    for(int i = 0; i < v.size ; i++)
+	{   
+		buffer[i] = coef[order];
+        for(int j= 0; j < order;j++)
+        {
+            buffer[i] += pow(v.vector[i],(order-j))*coef[j];
+        }
+        printf(" max = %f ", buffer[i]);
+	}
+
+    //sort buffer
+    qsort (buffer, v.size, sizeof(double), compare);
+
+    *xmax = buffer[v.size-1];
+    return buffer[v.size-1];
 }
 
 

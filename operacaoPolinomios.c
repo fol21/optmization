@@ -4,23 +4,24 @@
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
 int main(int argc, char** argv) {
-	// printf("[Begin Optimization]\n");
+	printf("[Begin Optimization]\n");
     
-    // double* local;
-    // double coef[5] = {1,2,3,4,5};
-    // int range[2] = {1,100};
+    double xmax;
+    double coef[5] = {1,2,3,4,5};
+    double range[2] = {1,5};
 
-    // local = optimize(coef,NELEMS(coef), range);
+    calculaMaximo(coef,NELEMS(coef)-1, range, &xmax);
 
-    // printf("[min = %f , max = %f]", local[0], local[1]);
+    printf("~\n[min =  , max = %f]", xmax);
 
-    	// your code goes here
-    	int s;
-	double* v = linSpace(1, 10, 2, &s);
-	printf("%d \n", s);
-	 for(int n = 0; n < s ; ++n)
-	 {
-            	printf("%f ", v[n]);
-	 }
+    // your code goes here
+    // LinSpaceVector v = {NULL,0};
+
+    // linSpace_populate(2, 10, 0.0001, &v);
+	// printf("%d \n", v.size);
+	// for(int n = 0; n < v.size ; ++n)
+	// {
+    //     printf("%f ", v.vector[n]);
+	// }
     return 0 ;
 }
