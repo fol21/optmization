@@ -10,9 +10,9 @@ int main(int argc, char** argv) {
     double coef[5] = {1,2,3,4,5};
     double range[2] = {1,5};
 
-    calculaMaximo(coef,NELEMS(coef)-1, range, &xmax);
+    double ymax = calculaMaximo(coef,NELEMS(coef)-1, range, &xmax);
 
-    printf("~\n[min =  , max = %f]", xmax);
+    printf("~\n[min = %f  , max = %f]", xmax, ymax);
 
     // your code goes here
     // LinSpaceVector v = {NULL,0};

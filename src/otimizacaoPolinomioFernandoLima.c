@@ -2,7 +2,7 @@
 
 
 /*
-    * Retorna vetor linear com step definido
+* Retorna vetor linear com step definido
 */
 LinSpaceVector* linSpace_populate(double begin, double end, double step, LinSpaceVector* lsv)
 {
@@ -19,11 +19,25 @@ LinSpaceVector* linSpace_populate(double begin, double end, double step, LinSpac
     return lsv;
 }
 
-int compare (const void * a, const void * b)
+
+
+/*
+* Tenta encotrar o index do valor especificado
+! retorna -1 caso o valor não seja encontrado
+*/
+int findIndex( const double a[], int size, double value )
+{
+    int index = 0;
+
+    while ( index < size && a[index] != value ) ++index;
+
+    return ( index == size ? -1 : index );
+}
+
+int _compare (const void * a, const void * b)
 {
   return ( *(double*)a - *(double*)b );
 }
-
 
 double calculaMaximo(double* coef, int order, double* range, double* xmax)
 {
@@ -39,13 +53,17 @@ double calculaMaximo(double* coef, int order, double* range, double* xmax)
         }
         printf(" max = %f ", buffer[i]);
 	}
-
+    double sorted_buffer = buffer;
     //sort buffer
-    qsort (buffer, v.size, sizeof(double), compare);
+    qsort (sorted_buffer, v.size, sizeof(double), _compare);
+    double ymax  = sorted_buffer[v.size-1];
+    index_max = findIndex(buffer, v.size, ymax);
+    *xmax = v[index_max];
 
-    *xmax = buffer[v.size-1];
-    return buffer[v.size-1];
+    return ymax;
 }
+
+
 
 
 // int main()
