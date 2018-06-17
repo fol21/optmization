@@ -20,30 +20,13 @@ LinSpaceVector* linSpace_populate(double begin, double end, double step, LinSpac
 }
 
 
-
-/*
-* Tenta encotrar o index do valor especificado
-! retorna -1 caso o valor não seja encontrado
-*/
-int findIndex( const double a[], int size, double value )
-{
-    int index = 0;
-
-    while ( index < size && a[index] != value ) ++index;
-
-    return ( index == size ? -1 : index );
-}
-
-int _compare (const void * a, const void * b)
-{
-  return ( *(double*)a - *(double*)b );
-}
-
 double calculaMaximo(double* coef, int order, double* range, double* xmax)
 {
     LinSpaceVector  v = {NULL, 0}; 
     linSpace_populate(range[0], range[1], 0.0001, &v);
     double* buffer = (double*)malloc(v.size*sizeof(double));
+    double  ymax = NEG_INFINITE;
+    int index_max = -1;
     for(int i = 0; i < v.size ; i++)
 	{   
 		buffer[i] = coef[order];
@@ -51,31 +34,91 @@ double calculaMaximo(double* coef, int order, double* range, double* xmax)
         {
             buffer[i] += pow(v.vector[i],(order-j))*coef[j];
         }
-        printf(" max = %f ", buffer[i]);
+        if(buffer[i] > ymax)
+		{
+			ymax = buffer[i];
+			index_max = i;	
+		}
+        //printf(" max = %f ", buffer[i]);
 	}
-    double sorted_buffer = buffer;
-    //sort buffer
-    qsort (sorted_buffer, v.size, sizeof(double), _compare);
-    double ymax  = sorted_buffer[v.size-1];
-    index_max = findIndex(buffer, v.size, ymax);
-    *xmax = v[index_max];
+    *xmax = v.vector[index_max];
 
     return ymax;
 }
 
+double calculaMinimo(double* coef, int order, double* range, double* xmin)
+{
+    LinSpaceVector  v = {NULL, 0}; 
+    linSpace_populate(range[0], range[1], 0.0001, &v);
+    double* buffer = (double*)malloc(v.size*sizeof(double));
+    double  ymin = POS_INFINITE;
+    int index_min = -1;
+    for(int i = 0; i < v.size ; i++)
+	{   
+		buffer[i] = coef[order];
+        for(int j= 0; j < order;j++)
+        {
+            buffer[i] += pow(v.vector[i],(order-j))*coef[j];
+        }
+        //printf(" max = %f ", buffer[i]);
+        if(buffer[i] < ymin)
+		{
+			ymin = buffer[i];
+			index_min = i;	
+		}
+	}
+    double* sorted_buffer = buffer;
+    //sort buffer
+    *xmin = v.vector[index_min];
 
+    return ymin;
+}
 
+char** str_split(char* a_str, const char a_delim)
+{
+    char** result    = 0;
+    size_t count     = 0;
+    char* tmp        = a_str;
+    char* last_comma = 0;
+    char delim[2];
+    delim[0] = a_delim;
+    delim[1] = 0;
 
-// int main()
-// {
-//     printf("[Begin Optimization]\n");
-    
-//     double* local;
-//     double coef[5] = {1,2,3,4,5};
-//     int range[2] = {1,100};
+    /* Count how many elements will be extracted. */
+    while (*tmp)
+    {
+        if (a_delim == *tmp)
+        {
+            count++;
+            last_comma = tmp;
+        }
+        tmp++;
+    }
 
-//     local = optimize(coef,lenght(coef), range);
+    /* Add space for trailing token. */
+    count += last_comma < (a_str + strlen(a_str) - 1);
 
-//     printf("[min = %f , max = %f]", local[0], local[1]);
-//     return 0 ;
-// }
+    /* Add space for terminating null string so caller
+       knows where the list of returned strings ends. */
+    count++;
+
+    result = (char**)malloc(sizeof(char*) * count);
+
+    if (result)
+    {
+        size_t idx  = 0;
+        char* token = strtok(a_str, delim);
+
+        while (token)
+        {
+            assert(idx < count);
+            *(result + idx++) = strdup(token);
+            token = strtok(0, delim);
+        }
+        assert(idx == count - 1);
+        *(result + idx) = 0;
+    }
+
+    return result;
+}
+
