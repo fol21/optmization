@@ -28,11 +28,12 @@ double calculaMaximo(double* coef, int order, double* range, double* xmax)
 {
     LinSpaceVector  v = {NULL, 0}; 
     linSpace_populate(range[0], range[1], 0.0001, &v);
-    double* buffer = (double*)malloc(v.size*sizeof(double));
+    double* buffer = (double*)malloc(v.size*sizeof(double)); // Valores de y = f(x)
     
-    double  ymax = NEG_INFINITE;
+    double  ymax = NEG_INFINITE; //Infinito negativo
     int index_max = -1;
     
+    //Polula buffer
     for(int i = 0; i < v.size ; i++)
 	{   
 		buffer[i] = coef[order];
@@ -40,12 +41,11 @@ double calculaMaximo(double* coef, int order, double* range, double* xmax)
         {
             buffer[i] += pow(v.vector[i],(order-j))*coef[j];
         }
-        if(buffer[i] > ymax)
+        if(buffer[i] > ymax) // Compara
 		{
 			ymax = buffer[i];
 			index_max = i;	
 		}
-        //printf(" max = %f ", buffer[i]);
 	}
     *xmax = v.vector[index_max];
 
@@ -61,8 +61,11 @@ double calculaMinimo(double* coef, int order, double* range, double* xmin)
     LinSpaceVector  v = {NULL, 0}; 
     linSpace_populate(range[0], range[1], 0.0001, &v);
     double* buffer = (double*)malloc(v.size*sizeof(double));
-    double  ymin = POS_INFINITE;
+    
+    double  ymin = POS_INFINITE; //Infinito Positivo
     int index_min = -1;
+        
+    //Polula buffer
     for(int i = 0; i < v.size ; i++)
 	{   
 		buffer[i] = coef[order];
@@ -77,8 +80,6 @@ double calculaMinimo(double* coef, int order, double* range, double* xmin)
 			index_min = i;	
 		}
 	}
-    double* sorted_buffer = buffer;
-    //sort buffer
     *xmin = v.vector[index_min];
 
     return ymin;
